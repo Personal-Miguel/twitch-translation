@@ -18,11 +18,14 @@ def triggerScreenshot():
     w, h = screenshot.size
     dimensions = (w-325, h-600, w-15, h-150)
     cropped = screenshot.crop(dimensions)
-    path = f"./screenshots/{name}.png"
+    path = f"./screenshot/{name}.png"
     cropped.save(path)
     
     
-    scraped = OCR.ocr(".\\screenshots\\image.png")
+    scraped = OCR.ocr(".\\screenshot\\image.png")
+    if scraped == None:
+        return
+
     for line in scraped[0]:
         parsedText = line[1][0]
         splitText = parsedText.split(":")
@@ -40,7 +43,14 @@ def triggerScreenshot():
     return path
 
 
-    
+def getDeepLAuth():
+    config = open(".config", "r")
+    text = config.read()
+
+    for line in text.splitlines():
+        if "DEEPL_AUTH" in line:
+            auth = line.split("=")[1]
+            return auth
 
 def main():
     
@@ -48,8 +58,8 @@ def main():
     global OCR
     global TRANSLATOR
 
-    OCR = PaddleOCR(lang="korean")
-    auth=""
+    OCR = PaddleOCR(lang="german")
+    auth = getDeepLAuth()
     TRANSLATOR = deepl.Translator(auth)
     schedule.every(5).seconds.do(triggerScreenshot)
 
