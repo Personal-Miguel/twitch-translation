@@ -1,13 +1,8 @@
-from datetime import datetime
 import time
-
-import pyscreenshot as GetImage
 import schedule
-from paddleocr import PaddleOCR, draw_ocr
-from PIL import Image
 import deepl
-
-
+import pyscreenshot as GetImage
+from paddleocr import PaddleOCR
 
 OCR = 0
 TRANSLATOR = 0
@@ -29,12 +24,13 @@ def triggerScreenshot():
     for line in scraped[0]:
         parsedText = line[1][0]
         splitText = parsedText.split(":")
-        user = ""
+
         textToTranslate = ""
         if(len(splitText) == 1):
             textToTranslate = splitText[0]
         else:
             textToTranslate = splitText[1]
+
         print(textToTranslate)
         if textToTranslate != "":
             translatedText = TRANSLATOR.translate_text(textToTranslate, target_lang="EN-US")
@@ -54,7 +50,6 @@ def getDeepLAuth():
 
 def main():
     
-
     global OCR
     global TRANSLATOR
 
